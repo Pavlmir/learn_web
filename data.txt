@@ -1,0 +1,19 @@
+set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run
+
+pyinstaller --onefile flaskapp.py
+pyinstaller --onefile flaskapp.spec
+
+datas=[('C:\\Users\\pavlm\\PycharmProjects\\learn_web_test\\webapp\\*', 'webapp')],
+
+C:\Users\pavlm\PycharmProjects\learn_web_test\dist\flaskapp.exe
+
+
+# config.py
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+WEATHER_URL = ""
+WEATHER_API_KEY = ""
+WEATHER_DEFAULT_CITY = ""
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '..', 'webapp.db')
+SQLALCHEMY_TRACK_MODIFICATIONS = False

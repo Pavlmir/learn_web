@@ -6,11 +6,21 @@ from webapp.model import db, News
 from webapp.forms import LoginForm
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from webapp.model import db, News, User
+import os, sys
 
+def resource_path(relative_path):
+    try:
+    # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile('config.py')
+    file_config = resource_path('webapp\config.py')
+    app.config.from_pyfile(file_config)
     db.init_app(app)
 
     login_manager = LoginManager()
