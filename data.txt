@@ -17,11 +17,15 @@ admin
 admin
 
 # config.py
-import os
-basedir = os.path.abspath(os.path.dirname(__file__))
+import os, sys
+
+# os.path.abspath(os.path.dirname(__file__))
+base_dir = '..'
+if hasattr(sys, '_MEIPASS'):
+    base_dir = os.path.join(sys._MEIPASS)
 
 WEATHER_URL = ""
 WEATHER_API_KEY = ""
 WEATHER_DEFAULT_CITY = ""
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, '..', 'webapp.db')
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(base_dir, 'webapp.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
