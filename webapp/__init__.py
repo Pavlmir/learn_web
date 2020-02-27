@@ -18,8 +18,16 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 def create_app():
-    app = Flask(__name__)
-    file_config = resource_path('webapp\config.py')
+
+    base_dir = '.'
+    if hasattr(sys, '_MEIPASS'):
+        base_dir = os.path.join(sys._MEIPASS)
+
+    app = Flask(__name__,
+                static_folder=os.path.join(base_dir, 'static'),
+                template_folder=os.path.join(base_dir, 'templates'))
+
+    file_config = resource_path(r'webapp\config.py')
     app.config.from_pyfile(file_config)
     db.init_app(app)
 
@@ -36,7 +44,7 @@ def create_app():
         title = "Новости Python"
         weather = weather_by_city(app.config["WEATHER_DEFAULT_CITY"])
         news_list = News.query.order_by(News.published.desc()).all()
-        return render_template('index.html', page_title=title, weather=weather, news_list=news_list)
+        return render_template(r'index.html', page_title=title, weather=weather, news_list=news_list)
 
     @app.route('/login')
     def login():
