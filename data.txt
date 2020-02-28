@@ -11,7 +11,7 @@ datas=[('C:\\Users\\pavlm\\PycharmProjects\\learn_web_test\\webapp\\*', 'webapp'
              ('C:\\Users\\pavel.gonyaev\\PycharmProjects\\learn_web\\webapp\\templates\\', 'templates'),
              ('C:\\Users\\pavel.gonyaev\\PycharmProjects\\learn_web\\webapp.db', '.')],
 
-C:\Users\pavlm\PycharmProjects\learn_web_test\dist\flaskapp.exe
+C:\Users\pavlm\PycharmProjects\learn_web\dist\flaskapp.exe
 C:\Users\pavel.gonyaev\PycharmProjects\learn_web\dist\flaskapp.exe
 
 admin
