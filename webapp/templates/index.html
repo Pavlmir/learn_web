@@ -26,18 +26,18 @@
                 </div>
                 {% endif %}
                 {% endwith %}
-                <h2> Новости </h2>
+                <h2> Е-CONNECTOR </h2>
                 {% for news in news_list %}
                 <h3><a href="{{ news.url }}">{{ news.title }}</a></h3>
                 <p>{{  news.published.strftime('%Y-%m-%d') }}</p>
                 {% endfor %}
             </div>
             <div class="col-md-4">
-                <h2> Прогноз погоды </h2>
+                <h2> Настройки </h2>
                 {% if weather %}
                 Погода: {{ weather.temp_C }}, ощущается как {{ weather.FeelsLikeC }}
                 {% else %}
-                Сервис погоды временно недоступен
+                Сервис находится в разработке
                 {% endif %}
             </div>
         </div>

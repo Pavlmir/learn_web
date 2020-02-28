@@ -1,4 +1,4 @@
-from flask import Flask, flash, redirect, url_for
+from flask import Flask, flash, redirect, url_for, request
 from flask import render_template
 from webapp.python_org_news import get_python_news
 from webapp.weather import weather_by_city
@@ -34,6 +34,12 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'login'
+
+    def shutdown_server():
+        func = request.environ.get('werkzeug.server.shutdown')
+        if func is None:
+            raise RuntimeError('Not running with the Werkzeug Server')
+        func()
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -82,5 +88,10 @@ def create_app():
             return 'Привет админ'
         else:
             return 'Ты не админ!'
+
+    @app.route('/shutdown', methods=['GET', 'POST'])
+    def shutdown():
+        shutdown_server()
+        return 'Server shutting down...'
 
     return app

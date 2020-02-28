@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import webapp
-import webbrowser
-from threading import Timer
-import time
-import types
-import sys
 import os
-from collections import OrderedDict
-from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication, QPushButton, QLineEdit, QTextBrowser, QCheckBox, QGridLayout, QSpacerItem, QSizePolicy, QSystemTrayIcon, QStyle, QAction, QMenu, qApp, QWidget, QLabel
-from PySide2.QtCore import QFile, QObject
-from PySide2 import QtWidgets, QtCore, QtGui
+import sys
 import threading
-from multiprocessing import Process
+import webbrowser
+
+from PySide2 import QtCore
+from PySide2.QtCore import QFile, QObject
+from PySide2.QtUiTools import QUiLoader
+from PySide2.QtWidgets import QApplication, QPushButton, QCheckBox, QSystemTrayIcon, QStyle, QAction, QMenu, qApp
+
+import webapp
+
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -49,6 +47,9 @@ class Form(QObject):
         btn = self.window.findChild(QPushButton, 'pushButton')
         btn.clicked.connect(self.ok_handler)
 
+        appflask = webapp.create_app()
+        thread = threading.Thread(target=appflask.run).start()
+
         # Инициализируем QSystemTrayIcon
         self.window.tray_icon = QSystemTrayIcon(self.window)
         self.window.tray_icon.setIcon(self.window.style().standardIcon(QStyle.SP_ComputerIcon))
@@ -59,19 +60,19 @@ class Form(QObject):
                     hide - скрыть окно
                     exit - выход из программы
                 '''
-        show_action = QAction("Show", self.window)
-        quit_action = QAction("Exit", self.window)
-        hide_action = QAction("Hide", self.window)
-        show_action.triggered.connect(self.show)
+        show_action = QAction("Показать окно", self.window)
+        quit_action = QAction("Выход из программы", self.window)
+        hide_action = QAction("Свернуть окно", self.window)
+        show_action.triggered.connect(self.window.show)
         hide_action.triggered.connect(self.window.hide)
-        quit_action.triggered.connect(qApp.quit)
+        quit_action.triggered.connect(self.quit_app)
         tray_menu = QMenu()
         tray_menu.addAction(show_action)
         tray_menu.addAction(hide_action)
         tray_menu.addAction(quit_action)
         self.window.tray_icon.setContextMenu(tray_menu)
         self.window.tray_icon.show()
-        # self.window.installEventFilter(self)
+        self.window.installEventFilter(self)
 
     # Переопределение метода closeEvent, для перехвата события закрытия окна
     # Окно будет закрываться только в том случае, если нет галочки в чекбоксе
@@ -93,59 +94,34 @@ class Form(QObject):
 
 
     # @QtCore.Slot()
-    # def quit_app(self):
-    #     # some actions to perform before actually quitting:
-    #     print('CLEAN EXIT')
-    #     self.window.removeEventFilter(self)
-    #     app.quit()
+    def quit_app(self):
+         webbrowser.open_new('http://127.0.0.1:5000/shutdown')
+         # some actions to perform before actually quitting:
+         self.window.removeEventFilter(self)
+         self.window.close()
+         print('CLEAN EXIT')
+         app.quit()
 
     def ok_handler(self):
         self.window.hide()
         self.window.setWindowFlags(self.window.windowFlags() & ~QtCore.Qt.Tool)
-        self.window.tray_icon.show()
-        # self.window.tray_icon.showMessage(
-        #             "Tray Program",
-        #             "Application was minimized to Tray",
-        #             QSystemTrayIcon.Information,
-        #             2000
-        #         )
-        self.open_browser()
-        # self.flask_run()
-        # t2 = threading.Thread(target=self.flask_run()).start()
-        # t2.join()
-
-        # p2 = Process(target=self.flask_run()).start()
-        # p2.join()
-
-    def flask_run(self):
-        appflask = webapp.create_app()
-        appflask.run()
+        self.window.tray_icon.showMessage(
+                    "Tray Program",
+                    "Application was minimized to Tray",
+                    QSystemTrayIcon.Information,
+                    2000
+                )
+        webbrowser.open_new('http://127.0.0.1:5000/')
 
 
     def show(self):
         self.window.show()
 
-
-    def open_browser(self):
-        webbrowser.open_new('http://127.0.0.1:5000/')
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     file_path = resource_path("mainwindow.ui")
     form = Form(file_path)
-    # form.show()
-    # p1 = Process(target=form.show()).start()
-    # p1.join()
-
-    t1  = threading.Thread(target=form.show()).start()
-
-    appflask = webapp.create_app()
-    t2 = Process(target=appflask.run()).start()
-    t2.join()
-
-    t1 .join()
-
+    form.show()
     sys.exit(app.exec_())
 
 
