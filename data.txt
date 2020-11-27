@@ -1,6 +1,6 @@
 set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run
 
-pyinstaller --onefile flaskapp.py
+pyinstaller --onefile --hidden-import PySide2.QtXml flaskapp.py
 pyinstaller --onefile flaskapp.spec
 
 datas=[('C:\\Users\\pavlm\\PycharmProjects\\learn_web_test\\webapp\\*', 'webapp')],
@@ -10,6 +10,12 @@ datas=[('C:\\Users\\pavlm\\PycharmProjects\\learn_web_test\\webapp\\*', 'webapp'
              ('C:\\Users\\pavel.gonyaev\\PycharmProjects\\learn_web\\webapp\\static\\', 'static'),
              ('C:\\Users\\pavel.gonyaev\\PycharmProjects\\learn_web\\webapp\\templates\\', 'templates'),
              ('C:\\Users\\pavel.gonyaev\\PycharmProjects\\learn_web\\webapp.db', '.')],
+              ('webapp.db', '.'),
+
+  datas=[('.\\webapp\\*', 'webapp'),
+             ('.\\webapp\\static\\', 'static'),
+             ('.\\webapp\\templates\\', 'templates'),
+             ('mainwindow.ui', '.')],
 
 C:\Users\pavlm\PycharmProjects\learn_web\dist\flaskapp.exe
 C:\Users\pavel.gonyaev\PycharmProjects\learn_web\dist\flaskapp.exe

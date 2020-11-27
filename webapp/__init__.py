@@ -15,7 +15,7 @@ def resource_path(relative_path):
     except Exception:
         base_path = os.path.dirname(os.path.realpath(__file__))
 
-    return os.path.join(base_path, '..', relative_path)
+    return os.path.join(base_path, relative_path)
 
 def create_app():
 
@@ -27,7 +27,7 @@ def create_app():
                 static_folder=os.path.join(base_dir, 'static'),
                 template_folder=os.path.join(base_dir, 'templates'))
 
-    file_config = resource_path(r'webapp\config.py')
+    file_config = resource_path(r'config.py')
     app.config.from_pyfile(file_config)
     db.init_app(app)
 
